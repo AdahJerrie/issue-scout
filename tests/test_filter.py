@@ -1,7 +1,7 @@
-from datetime import datetime, timezone
+
 from scout.filter import filter_issues
 
-NOW = datetime(2026, 11, 9, tzinfo=timezone.utc)
+CUTOFF = "2026-08-11"  # 90 days before 2026-11-09
 
 def make(**over):
     base = {
@@ -17,27 +17,27 @@ def make(**over):
     return base
 
 def test_keeps_a_good_issue():
-    out = filter_issues([make()], NOW)
+    out = filter_issues([make()], CUTOFF)
     assert len(out) == 1
     assert out[0]["repo"] == "acme/tool"
     assert out[0]["labels"] == ["good first issue"]
 
 def test_drops_pull_requests():
-    assert filter_issues([make(pull_request={})], NOW) == []
+    assert filter_issues([make(pull_request={})], CUTOFF) == []
 
 def test_drops_assigned():
-    assert filter_issues([make(assignee={"login": "x"})], NOW) == []
+    assert filter_issues([make(assignee={"login": "x"})], CUTOFF) == []
 
 def test_drops_stale():
-    assert filter_issues([make(updated_at="2026-01-01T00:00:00Z")], NOW) == []
+    assert filter_issues([make(updated_at="2026-01-01T00:00:00Z")], CUTOFF) == []
 
 def test_handles_missing_body():
-    assert filter_issues([make(body=None)], NOW) == []
+    assert filter_issues([make(body=None)], CUTOFF) == []
 
 def test_drops_busy_threads():
-    assert filter_issues([make(comments=25)], NOW) == []
+    assert filter_issues([make(comments=25)], CUTOFF) == []
 
 def test_dedupes_and_truncates():
-    out = filter_issues([make(body="x" * 5000), make()], NOW)
+    out = filter_issues([make(body="x" * 5000), make()], CUTOFF)
     assert len(out) == 1
     assert len(out[0]["body"]) <= 800
