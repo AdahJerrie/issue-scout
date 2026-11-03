@@ -1,11 +1,4 @@
-from datetime import datetime, timedelta
-
 REPO_PREFIX = "https://api.github.com/repos/"
-
-
-def _parse_time(value):
-    """Turn GitHub's '2026-11-05T10:00:00Z' into a datetime."""
-    return datetime.fromisoformat(value.replace("Z", "+00:00"))
 
 
 def _clean_body(text, max_chars):
@@ -13,10 +6,12 @@ def _clean_body(text, max_chars):
     return " ".join(text.split())[:max_chars]
 
 
-def filter_issues(items, now, max_age_days=90, min_body_chars=50,
-                  max_comments=10, max_body_chars=800, max_candidates=15):
-    """Keep only issues worth sending to the AI; return small clean dicts."""
-    cutoff = now - timedelta(days=max_age_days)
+def filter_issues(items, cutoff_date, min_body_chars=50, max_comments=10,
+                  max_body_chars=800, max_candidates=15):
+    """Keep only issues worth sending to the AI; return small clean dicts.
+
+    cutoff_date is a 'YYYY-MM-DD' string; issues last updated before it are stale.
+    """
     seen_ids = set()
     kept = []
 
@@ -30,8 +25,8 @@ def filter_issues(items, now, max_age_days=90, min_body_chars=50,
         # Rule 6: duplicates
         if item["id"] in seen_ids:
             continue
-        # Rule 3: stale
-        if _parse_time(item["updated_at"]) < cutoff:
+        # Rule 3: stale (first 10 chars of '2026-11-05T10:00:00Z' are the date)
+        if item["updated_at"][:10] < cutoff_date:
             continue
         # Rule 4: missing or too-short body (body can be None!)
         body = _clean_body(item.get("body") or "", max_body_chars)
