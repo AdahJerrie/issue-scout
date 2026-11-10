@@ -50,3 +50,4 @@ def build_failure_email(errors):
     lines.append("Open the workflow's Executions tab in n8n to see the details.")
     return {"subject": "Issue Scout: run failed", "html": _esc("\n".join(lines)).replace("\n", "<br>"),
             "text": "\n".join(lines)}
+
