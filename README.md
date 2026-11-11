@@ -4,8 +4,6 @@
 
 Built with **n8n + Python + a Gemini model** as my individual capstone for the CTA AI & Automation course.
 
-> 📸 **SCREENSHOT 1: Full workflow canvas** (all nodes visible, zoomed to fit; this is the hero image)
-> Save as `docs/01-canvas.png`, then delete this note.
 
 ![Issue Scout workflow in n8n](docs/01-canvas.png)
 
@@ -42,30 +40,9 @@ Send email ◄─ Python: Build email ◄─ IF ok? ◄─ Python: Validate ◄�
 | **Validate** | Checks every field of the AI's answer against the real candidates and keeps the top 5 | **Python** (`scout/validate.py`) |
 | **Action** | Emails an HTML digest with real GitHub links, or a failure alert if validation fails | **Python** (`scout/email_builder.py`) + n8n Send Email |
 
-> 📸 **SCREENSHOT 2: GitHub HTTP Request output** (show the 30 items returned)
-> Save as `docs/02-github-output.png`, then delete this note.
 
-![GitHub search returns 30 raw issues](docs/02-github-output.png)
-
-> 📸 **SCREENSHOT 3: Filter node output** (show the 15 candidates)
-> Save as `docs/03-filter-output.png`, then delete this note.
-
-![After filtering: 15 candidates](docs/03-filter-output.png)
-
-> 📸 **SCREENSHOT 4: Score Issues output** (the AI's JSON reply, with `results` visible; do not show any key)
-> Save as `docs/04-ai-output.png`, then delete this note.
-
-![The AI's scored results](docs/04-ai-output.png)
-
-> 📸 **SCREENSHOT 5: Validate output** (`ok: true`, 5 picks, empty errors)
-> Save as `docs/05-validate-output.png`, then delete this note.
-
-![Validation passes with 5 picks](docs/05-validate-output.png)
 
 ## Example result
-
-> 📸 **SCREENSHOT 6: The digest email** in your inbox (blur or crop your email address and any private details)
-> Save as `docs/06-digest-email.png`, then delete this note.
 
 ![The daily digest email](docs/06-digest-email.png)
 
@@ -96,9 +73,6 @@ AI output is treated as **untrusted until checked**:
 7. **Privacy.** Only public GitHub data and a generic skill profile are sent to the AI. No personal data is included. Secrets live in n8n credentials and are never committed.
 8. **Failure transparency.** If the AI's reply can't be used, I get an alert email instead of silence.
 
-> 📸 **SCREENSHOT 7: The failure email** (from the forced-failure test, showing the error message)
-> Save as `docs/07-failure-email.png`, then delete this note.
-
 ![The failure alert email](docs/07-failure-email.png)
 
 ## Tests
@@ -108,11 +82,6 @@ AI output is treated as **untrusted until checked**:
 ```bash
 python3 -m pytest -q
 ```
-
-> 📸 **SCREENSHOT 8: Terminal showing `26 passed`**
-> Save as `docs/08-tests-passing.png`, then delete this note.
-
-![All tests passing](docs/08-tests-passing.png)
 
 ## Setup
 
@@ -126,10 +95,6 @@ python3 -m pytest -q
 
 Never commit keys or tokens. Credentials are not included in the workflow export.
 
-> 📸 **SCREENSHOT 9: Executions tab** showing a scheduled run (the trigger column should say it was automatic)
-> Save as `docs/09-scheduled-run.png`, then delete this note.
-
-![A scheduled run in the Executions tab](docs/09-scheduled-run.png)
 
 ## Challenges and what I learned
 
