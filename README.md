@@ -93,9 +93,6 @@ python3 -m pytest -q
 3. **Python nodes:** n8n Cloud's Python sandbox cannot import local files, so each Python Code node contains the matching module from `scout/` (pasted in) plus a short wrapper at the bottom.
 4. **Set the timezone** in the workflow settings and **activate** the workflow so the schedule runs.
 
-Never commit keys or tokens. Credentials are not included in the workflow export.
-
-
 ## Challenges and what I learned
 
 - **n8n's Python sandbox allows no imports**, not even `datetime`, and blocks some built-ins. I rewrote the filter to compare dates as text, passed the cutoff date in from n8n, and used a small JavaScript node for the one job Python can't do there (parsing JSON).
